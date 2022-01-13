@@ -28,7 +28,7 @@ function optionChanged(newSample) {
   // Fetch new data each time a new sample is selected
   buildMetadata(newSample);
   buildCharts(newSample);
-  
+
 }
 
 // Demographics Panel 
@@ -83,10 +83,8 @@ function buildCharts(sample) {
     var yticks = otuIds.slice(0, 10).map(otuIds => `OTU ${otuIds}`).reverse();
     // console.log(yticks);
 
-    
-
     // 8. Create the trace for the bar chart. 
-    trace = {
+    barTrace = {
       x: sampleValues.slice(0, 10).reverse(),
       y: yticks,
       text: otuLabels.slice(0, 10).reverse(),
@@ -94,14 +92,41 @@ function buildCharts(sample) {
       orientation: "h"
     }
 
-    var barData = [trace];
+    var barData = [barTrace];
 
     // 9. Create the layout for the bar chart. 
     var barLayout = {
       title: "Top 10 Bacterial Cultures Found",
     };
-    
+
     // 10. Use Plotly to plot the data with the layout. 
     Plotly.newPlot("bar", barData, barLayout);
+
+// Bar and Bubble charts
+    // 1. Create the trace for the bubble chart.
+    var bubbleTrace = {
+      x: otuIds,
+      y: sampleValues,
+      text: otuLabels,
+      mode: 'markers',
+      marker: {
+        color: otuIds,
+        size: sampleValues,
+        colorscale: "Earth"
+      }
+    };
+    
+    var bubbleData = [bubbleTrace];
+
+    // 2. Create the layout for the bubble chart.
+    var bubbleLayout = {
+      title: 'Bacteria Cultures Per Sample',
+      showlegend: false,
+
+    };
+
+    // 3. Use Plotly to plot the data with the layout.
+    Plotly.newPlot("bubble", bubbleData, bubbleLayout);
   });
 }
+
